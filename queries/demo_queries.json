@@ -1,0 +1,26 @@
+{
+    "department": "SELECT * FROM departments;",
+    "role": [ 
+        "SELECT",
+        "    roles.title AS job_title, roles.role_id,",
+        "    departments.dept_name AS department, roles.salary",
+        "FROM",
+        "    roles",
+        "    LEFT JOIN departments ON roles.dept_id = departments.dept_id;"
+    ],
+    "employee": [
+        "SELECT ",
+        "    e.emp_id, concat(e.first_name,' ', e.last_name) AS name,",
+        "    roles.title AS job_title,",
+        "    departments.dept_name AS department,",
+        "    roles.salary,",
+        "    e.manager_id,",
+        "    concat(m.first_name, ' ', m.last_name) AS manager",
+        "FROM",
+        "    employees e",
+        "    LEFT JOIN roles ON e.role_id = roles.role_id",
+        "    LEFT JOIN departments ON roles.dept_id = departments.dept_id",
+        "    LEFT JOIN employees m ON e.manager_id = m.emp_id;"
+    ],
+    "employeeList": [ "SELECT emp_id, concat(first_name, ' ', last_name) AS name FROM employees;"]
+}
