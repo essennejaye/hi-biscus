@@ -22,5 +22,5 @@
         "    LEFT JOIN departments ON roles.dept_id = departments.dept_id",
         "    LEFT JOIN employees m ON e.manager_id = m.emp_id;"
     ],
-    "employeeList": [ "SELECT emp_id, concat(first_name, ' ', last_name) AS name FROM employees;"]
+    "employeeList":  "SELECT emp_id, concat(first_name, ' ', last_name) AS name FROM employees;"
 }

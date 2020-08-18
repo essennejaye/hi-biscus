@@ -54,11 +54,14 @@ const companyManager = () => {
             case 'Add an employee.':
                 newEmpPrompt();
                 break;
+            // update query calls function to get employee names for choices list in prompt
             case 'Update an employee.':
                 queryChoices();
         }
     });
 };
+
+// gets new dept_name and then calls new department query function
 const newDeptPrompt = () => {
     console.log(`
     =====================
@@ -82,6 +85,7 @@ const newDeptPrompt = () => {
         });
 };
 
+// gets new role name (title), salary and dept_id and then calls new role query function
 const newRolePrompt = () => {
     console.log(`
     =====================
@@ -131,6 +135,7 @@ const newRolePrompt = () => {
     });
 };
 
+// gets new employee first_ name, last_name, role_id, and manager_id and then calls new employee query function
 const newEmpPrompt = () => {
     console.log(`
     =====================
@@ -202,28 +207,29 @@ const newEmpPrompt = () => {
     });
 };
 
+// employees query to get list of employees for choices array in prompt
+// employee update prompt is called after query results are destructured for choices prompt 
+queryChoices = () => {
+    runQueryJson('queries/demo_queries.json', 'employeeList')
+        .then(queryData => {
+            let queryResults = queryData.map(mapObj);
+            updateEmpPrompt(queryResults);
+        });
+};
 
+// query results are destructured (mapped) to new object array
 // Input: query = { emp_id: #, name: '' }
 // Output: { value: { id: #, name: '' }, name: '' }
 mapObj = (query) => {
     //return { value: query.emp_id, name: `${query.name} (${query.emp_id})` };
-    //return { value: query.emp_id, name: query.name };
     return {
         value: { id: query.emp_id, name: query.name},
         name: query.name
     };
-}
+};
 
-queryChoices = () => {
-    runQueryJson('queries/demo_queries.json', 'employeeList')
-        .then(queryData => {
-            //console.log(queryData);
-            let queryResults = queryData.map(mapObj);
-            updateEmpPrompt(queryResults);
-            //console.log(queryResults);
-        })
-}
-
+// gets employee id, name, and new role_id and then calls update employee query function
+// query results are passed in to list employees for prompt choices
 const updateEmpPrompt = (queryResults) => {
     console.log(`
         ===================
@@ -253,8 +259,7 @@ const updateEmpPrompt = (queryResults) => {
     ]).then(response => {
         console.log(response);
         updateEmp({ emp_id: response.emp_id.id, role_id: response.role_id, name: response.emp_id.name });
-        //updateEmp(response);
     });
 }
-
+// run code
 companyManager();
