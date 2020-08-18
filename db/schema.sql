@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS company_db;
-CREATE DATABASE company_db;
+-- DROP DATABASE IF EXISTS company_db;
+-- CREATE DATABASE company_db;
 USE company_db;
 
 DROP TABLE IF EXISTS departments;
@@ -14,7 +14,7 @@ CREATE TABLE departments (
 
 CREATE TABLE roles (
     role_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    title VARCHAR(30) UNIQUE NOT NULL,
+    title VARCHAR(30)  NOT NULL,
     salary DECIMAL UNSIGNED NOT NULL,
     dept_id INT UNSIGNED NOT NULL,
     PRIMARY KEY (role_id),

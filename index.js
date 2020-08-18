@@ -8,6 +8,7 @@ const companyManager = () => {
     Welcome to your Company Manager App
     ====================================
     `);
+    // prompt for user to determine action
     return inquirer.prompt([
         {
             type: 'list',
@@ -26,8 +27,10 @@ const companyManager = () => {
                 'Update an employee.'
             ]
         }
+        // perform queries based on choice
     ]).then(response => {
         switch (response.toDo) {
+            // SELECT queries run from JSON file using key name
             case 'View all departments.':
                 runQueryJson('queries/demo_queries.json', 'department');
                 break;
@@ -41,6 +44,7 @@ const companyManager = () => {
                 //TODO - move runQuery to a common js file and require it where needed
                 runQuery('queries/managers.sql');
                 break;
+            // all other queries call prompts for user input
             case 'Add a department.':
                 newDeptPrompt();
                 break;
@@ -51,7 +55,7 @@ const companyManager = () => {
                 newEmpPrompt();
                 break;
             case 'Update an employee.':
-                updateEmpPrompt();
+                queryChoices();
         }
     });
 };
@@ -198,22 +202,44 @@ const newEmpPrompt = () => {
     });
 };
 
-const updateEmpPrompt = () => {
-    console.log(`
-    ===================
-    Update an Employee
-    ===================
-    `);
+
+// Input: query = { emp_id: #, name: '' }
+// Output: { value: { id: #, name: '' }, name: '' }
+mapObj = (query) => {
+    //return { value: query.emp_id, name: `${query.name} (${query.emp_id})` };
+    //return { value: query.emp_id, name: query.name };
+    return {
+        value: { id: query.emp_id, name: query.name},
+        name: query.name
+    };
+}
+
+queryChoices = () => {
     runQueryJson('queries/demo_queries.json', 'employeeList')
+        .then(queryData => {
+            //console.log(queryData);
+            let queryResults = queryData.map(mapObj);
+            updateEmpPrompt(queryResults);
+            //console.log(queryResults);
+        })
+}
+
+const updateEmpPrompt = (queryResults) => {
+    console.log(`
+        ===================
+        Update an Employee
+        ===================
+        `);
+
     return inquirer.prompt([
         {
             type: 'list',
-            name: 'emp_list',
+            name: 'emp_id',
             message: 'Please select an employee to update',
-            choices: [queryResults]
+            choices: queryResults
         },
         {
-            type: 'input',
+            type: 'number',
             name: 'role_id',
             message: 'Please enter employee\'s new role id number?',
             validate: role_idInput => {
@@ -225,7 +251,9 @@ const updateEmpPrompt = () => {
             }
         }
     ]).then(response => {
-        updateEmp(response);
+        console.log(response);
+        updateEmp({ emp_id: response.emp_id.id, role_id: response.role_id, name: response.emp_id.name });
+        //updateEmp(response);
     });
 }
 
