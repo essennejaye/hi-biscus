@@ -18,7 +18,6 @@ const companyManager = () => {
                 'View all departments.',
                 'View all roles.',
                 'View all employees.',
-                'View all managers.',
                 new inquirer.Separator(),
                 'Add a department.',
                 'Add a role.',
@@ -39,10 +38,6 @@ const companyManager = () => {
                 break;
             case 'View all employees.':
                 runQueryJson('queries/demo_queries.json', 'employee');
-                break;
-            case 'View all managers.':
-                //TODO - move runQuery to a common js file and require it where needed
-                runQuery('queries/managers.sql');
                 break;
             // all other queries call prompts for user input
             case 'Add a department.':
@@ -200,9 +195,9 @@ const newEmpPrompt = () => {
             }
         },
     ]).then(response => {
-        if (!response.manager_id) {
-            response.manager_id = NULL
-        }
+        // if (!response.manager_id) {
+        //     response.manager_id = '';
+        // }
         addNewEmp(response);
     });
 };
@@ -223,7 +218,7 @@ queryChoices = () => {
 mapObj = (query) => {
     //return { value: query.emp_id, name: `${query.name} (${query.emp_id})` };
     return {
-        value: { id: query.emp_id, name: query.name},
+        value: { id: query.emp_id, name: query.name },
         name: query.name
     };
 };
@@ -251,7 +246,7 @@ const updateEmpPrompt = (queryResults) => {
             validate: role_idInput => {
                 if (!Number.isInteger(role_idInput) || role_idInput < 0) {
                     console.log('New role id must be a number greater than zero!');
-                    return false;
+                    return;
                 }
                 return true;
             }

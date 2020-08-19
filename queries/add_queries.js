@@ -9,7 +9,7 @@ addNewDept = (data) => {
         },
         (err, res) => {
             if (err) throw err;
-            console.log(res.affectedRows + ' ' + newDept + ' department inserted!')
+            console.log(res.affectedRows + ' ' + data.dept_name + ' department inserted!')
         }
     )
 };
@@ -47,8 +47,8 @@ addNewEmp = (data) => {
 
 // Input: data = { emp_id: #, role_id: #, name: '' }
 updateEmp = (data) => {
-    console.log('update With this object:');
-    console.log(data);
+    // console.log('update With this object:');
+    // console.log(data);
     dbConn.query(
         'UPDATE employees SET ? WHERE ?',
         [
@@ -61,8 +61,7 @@ updateEmp = (data) => {
         ], 
         (err, res) => {
             if (err) throw err;
-            console.log(res);
-            //console.log(res.affectedRows + ' ' + data.first_name + ' ' + data.last_name + ' employee updated!')
+            // console.log(res);
             console.log(res.affectedRows + ' ' + data.name + ' employee updated!')
         }
 

@@ -10,7 +10,7 @@ const dbConn = mysql.createConnection({
   database: 'company_db' 
 });
 
-dbConn.connect ((err) => {
+dbConn.connect (err => {
   if (err) throw err;
   console.log('Database connected');
 });
