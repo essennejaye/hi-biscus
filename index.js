@@ -1,7 +1,10 @@
 const inquirer = require('inquirer');
 require('./queries/view_queries');
 require('./queries/add_queries');
+// const mysql = require('mysql2');
 
+
+// Returns true if the user chose to quit, false otherwise.
 const companyManager = () => {
     console.log(`
     ====================================
@@ -23,7 +26,9 @@ const companyManager = () => {
                 'Add a role.',
                 'Add an employee.',
                 new inquirer.Separator(),
-                'Update an employee.'
+                'Update an employee.',
+                new inquirer.Separator(),
+                'Quit'
             ]
         }
         // perform queries based on choice
@@ -52,7 +57,11 @@ const companyManager = () => {
             // update query calls function to get employee names for choices list in prompt
             case 'Update an employee.':
                 queryChoices();
+                break;
+            case 'Quit':
+                return true; // the only way to quit is this menu option
         }
+        return false; // returning false means 'don't quit yet'
     });
 };
 
@@ -195,9 +204,6 @@ const newEmpPrompt = () => {
             }
         },
     ]).then(response => {
-        // if (!response.manager_id) {
-        //     response.manager_id = '';
-        // }
         addNewEmp(response);
     });
 };
@@ -256,5 +262,23 @@ const updateEmpPrompt = (queryResults) => {
         updateEmp({ emp_id: response.emp_id.id, role_id: response.role_id, name: response.emp_id.name });
     });
 }
-// run code
-companyManager();
+
+// Define an async arrow function that can await each invocation
+// of the companyManager function.
+manageCompany = async () => {
+    var quit = false;
+    do {
+        // Await the result of the call instead of using a
+        // promise and then callback chain since this isn't
+        // being handle asynchronously.
+        // Quit when we get true back from companyManager.
+        quit = await companyManager();
+    } while(!quit);
+
+    // We're done, disconnect the DB and say goodbye!
+    endConnect();
+    console.log('DB disconnected, goodbye!');
+}
+
+// Call the function directly
+manageCompany();

@@ -45,10 +45,7 @@ addNewEmp = (data) => {
     )
 };
 
-// Input: data = { emp_id: #, role_id: #, name: '' }
 updateEmp = (data) => {
-    // console.log('update With this object:');
-    // console.log(data);
     dbConn.query(
         'UPDATE employees SET ? WHERE ?',
         [

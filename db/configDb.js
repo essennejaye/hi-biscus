@@ -14,5 +14,8 @@ dbConn.connect (err => {
   if (err) throw err;
   console.log('Database connected');
 });
+endConnect = () => {
+  dbConn.end();
+}
 
 module.exports = dbConn;
